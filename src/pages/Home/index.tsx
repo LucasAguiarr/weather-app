@@ -18,19 +18,15 @@ import {
 import { Colors } from '../../styles/Colors';
 
 import { DayOfTheWeek } from '../../components/DayOfTheWeek';
-import { ICityProps } from '../../libs/storage';
-import { convertTemperature } from '../../libs/conver';
 import { useCities } from '../../hooks/useCities';
+import { convertTemperature } from '../../libs/conver';
+import { WeatherIcons } from '../../styles/WatherIcons';
 
 export const Home = () => {
-  const {name, main} = useCities();
+  const cities = useCities();
+  const { setUserCities, main, name, weather } = cities;
   const [isCelsius, setIsCelsius] = useState(true);
   const navigation = useNavigation();
-  const [temperature, setTemperature] = useState<number>();
-
-  useEffect(() => {
-    setTemperature(main.temp)
-  },[])
 
   const handleChangeTemperature = () => {
     setIsCelsius(!isCelsius);
@@ -38,8 +34,8 @@ export const Home = () => {
     if (isCelsius) {
       type = 'c';
     }
-    const newTemperature = convertTemperature(temperature!, type);
-    setTemperature(newTemperature);
+    const newTemperature = convertTemperature(main.temp, type);
+    setUserCities({ ...cities, main: { ...main, temp: newTemperature } });
   };
   return (
     <Wrapper>
@@ -50,13 +46,13 @@ export const Home = () => {
         <Day>Today</Day>
       </Header>
       <Content>
-        <MaterialCommunityIcons
-          name={'weather-cloudy'}
+        <WeatherIcons
+          description={weather[0].description}
           size={100}
           color={Colors.secondary}
         />
         <Degrees activeOpacity={0.7} onPress={handleChangeTemperature}>
-          <DegreesText>{temperature}°</DegreesText>
+          <DegreesText>{main?.temp.toFixed(0)}°</DegreesText>
         </Degrees>
 
         <NextDayWrapper>

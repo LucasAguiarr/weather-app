@@ -1,13 +1,6 @@
 import styled from 'styled-components/native';
-import { StyleSheet } from 'react-native';
 import { Colors } from '../../styles/Colors';
 import { Fonts } from '../../styles/Fonts';
-
-export const styles = StyleSheet.create({
-  flatList: {
-    flex: 1,
-  },
-});
 
 export const Wrapper = styled.SafeAreaView`
   flex: 1;
@@ -21,8 +14,9 @@ export const Header = styled.View`
 `;
 
 export const Content = styled.View`
-  margin: 0 20px;
   flex: 1;
+  margin: 0 20px;
+  justify-content: center;
 `;
 
 export const LabelCities = styled.Text`

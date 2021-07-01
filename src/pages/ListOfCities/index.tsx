@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Keyboard, TouchableWithoutFeedback } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { Alert, Keyboard, TouchableWithoutFeedback, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Wrapper, Header, Content, styles, LabelCities } from './styles';
+import { Wrapper, Header, Content, LabelCities } from './styles';
 
 import { getCityByName } from '../../services/Api';
 import { ICityProps, loadCity, removeCity, saveCity } from '../../libs/storage';
@@ -12,10 +11,11 @@ import { Input } from '../../components/Input';
 import { useCities } from '../../hooks/useCities';
 
 export const ListOfCities = () => {
-  const {changeUserCities} = useCities();
+  const { setUserCities } = useCities();
   const navigation = useNavigation();
   const [cityName, setCityName] = useState('');
   const [userCity, setUserCity] = useState<ICityProps[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const loadStorageData = async () => {
@@ -48,13 +48,17 @@ export const ListOfCities = () => {
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
+    setCityName('');
     const res = await getCityByName(cityName.trim());
     try {
       if (!res) return;
       await saveCity(res);
-      setUserCity([...userCity, res])
+      setUserCity([...userCity, res]);
     } catch {
       return Alert.alert('Error ao salvar');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -64,7 +68,7 @@ export const ListOfCities = () => {
         <Header>
           <Input
             text={'City'}
-            placeholder={'Enter the city name'}
+            placeholder={loading ? 'Loading...' : 'Enter the city name'}
             onSubmit={handleSubmit}
             onChangeText={(text) => setCityName(text)}
             value={cityName}
@@ -72,7 +76,7 @@ export const ListOfCities = () => {
         </Header>
         <Content>
           {!userCity.length ? (
-            <LabelCities>Nenhuma cidade cadastrada</LabelCities>
+            <LabelCities>No city registered</LabelCities>
           ) : (
             <LabelCities>Cities</LabelCities>
           )}
@@ -82,16 +86,15 @@ export const ListOfCities = () => {
             renderItem={({ item }) => (
               <CardListCities
                 onPress={() => {
-                  changeUserCities(item)
-                  navigation.navigate('Home', item)}}
+                  setUserCities(item);
+                  navigation.navigate('Home', item);
+                }}
                 data={item}
                 handleRemove={() => {
                   handleRemove(item);
                 }}
               />
             )}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.flatList}
           />
         </Content>
       </Wrapper>

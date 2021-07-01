@@ -11,7 +11,7 @@ import {
   CityName,
 } from './styles';
 import { Colors } from '../../styles/Colors';
-import { weatherIcons } from '../../styles/watherIcons';
+import { WeatherIcons } from '../../styles/WatherIcons';
 import { ICityProps } from '../../libs/storage';
 
 export interface ICardProps extends RectButtonProps {
@@ -40,7 +40,7 @@ export const CardListCities: React.FC<ICardProps> = ({
       <Button {...rest} onPress={onPress}>
         <CityName>{data.name}</CityName>
         <Details>
-          {weatherIcons(data.weather[0].description)}
+          <WeatherIcons description={data.weather[0].description} />
           <DegreesText>{data.main.temp}°</DegreesText>
         </Details>
       </Button>

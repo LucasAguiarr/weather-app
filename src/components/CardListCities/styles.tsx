@@ -6,12 +6,9 @@ import { Colors } from '../../styles/Colors';
 import { Fonts } from '../../styles/Fonts';
 
 export const Button = styled(({ ...rest }) => <RectButton {...rest} />)`
-  width: 100%;
+  flex: 1;
   background-color: ${Colors.secondary};
-  border-radius: 10px;
-  margin: auto;
   padding: 25px 10px;
-  align-items: center;
   border-radius: 10px;
   flex-direction: row;
   margin: 5px 0;

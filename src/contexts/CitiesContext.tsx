@@ -1,8 +1,8 @@
-import AppLoading from 'expo-app-loading';
 import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import { GetLocation } from '../libs/GetLocation';
 import { ICityProps } from '../libs/storage';
 import { getCityByLatAndLon } from '../services/Api';
+import Load from '../components/Load';
 
 type TCitiesContextProviderProps = { children: ReactNode };
 export const CitiesContext = createContext({} as ICityProps);
@@ -26,16 +26,13 @@ export const CitiesContextProvider = ({
     location();
   }, []);
   
-  const changeUserCities = (item:ICityProps) => {
-    setUserCities(item)
-  }
 
   return (
     <>
       {!userCities ? (
-        <AppLoading />
+        <Load />
       ) : (
-        <CitiesContext.Provider value={{...userCities,  changeUserCities}}>
+        <CitiesContext.Provider value={{...userCities,  setUserCities}}>
           {children}
         </CitiesContext.Provider>
       )}

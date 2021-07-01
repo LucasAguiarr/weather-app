@@ -42,7 +42,7 @@ export interface ICityProps {
     deg: number;
     speed: number;
   };
-  changeUserCities: (item:ICityProps) => void;
+  setUserCities: (item: ICityProps) => void;
 }
 
 export interface IStorageCityProps {
@@ -54,9 +54,9 @@ export interface IStorageCityProps {
 export const saveCity = async (city: ICityProps): Promise<void> => {
   try {
     const data = await AsyncStorage.getItem('@weather:cities');
-    const oldPlants = data ? (JSON.parse(data) as IStorageCityProps) : {};
+    const onlCities = data ? (JSON.parse(data) as IStorageCityProps) : {};
 
-    const newPlant = {
+    const newCity = {
       [city.id]: {
         data: city,
       },
@@ -65,8 +65,8 @@ export const saveCity = async (city: ICityProps): Promise<void> => {
     await AsyncStorage.setItem(
       '@weather:cities',
       JSON.stringify({
-        ...newPlant,
-        ...oldPlants,
+        ...newCity,
+        ...onlCities,
       }),
     );
   } catch (error) {

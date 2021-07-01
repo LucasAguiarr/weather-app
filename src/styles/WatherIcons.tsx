@@ -1,8 +1,17 @@
 import React from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-export const weatherIcons = (description: string) => {
-  let iconName:any = '';
+interface IWeatherIconsProps {
+  description: string;
+  size?: number | undefined;
+  color?: string | undefined;
+}
+export const WeatherIcons = ({
+  description,
+  size = undefined,
+  color = undefined,
+}: IWeatherIconsProps) => {
+  let iconName: any = '';
   switch (description) {
     case 'clear sky':
       iconName = 'weather-sunny';
@@ -31,8 +40,12 @@ export const weatherIcons = (description: string) => {
     case 'mist':
       iconName = 'weather-tornado';
       break;
-    default:
-      break;
   }
-  return <MaterialCommunityIcons name={iconName} size={24} color="black" />;
+  return (
+    <MaterialCommunityIcons
+      name={iconName}
+      size={size ? size : 24}
+      color={color ? color : 'black'}
+    />
+  );
 };
