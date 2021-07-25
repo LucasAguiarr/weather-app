@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Keyboard, TouchableWithoutFeedback, FlatList } from 'react-native';
+import {
+  Alert,
+  Keyboard,
+  TouchableWithoutFeedback,
+  FlatList,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Wrapper, Header, Content, LabelCities } from './styles';
 
@@ -23,7 +28,7 @@ export const ListOfCities = () => {
       setUserCity(citiesStorage);
     };
     loadStorageData();
-  }, []);
+  }, [userCity]);
 
   const handleRemove = (city: ICityProps) => {
     Alert.alert('Remover', `Deseja remover ${city.name} da lista?`, [
@@ -36,9 +41,8 @@ export const ListOfCities = () => {
         onPress: async () => {
           try {
             await removeCity(String(city.id));
-            setUserCity((oldData) =>
-              oldData.filter((item) => item.id !== city.id),
-            );
+            const cities = userCity.filter((item) => item.id !== city.id);
+            setUserCity(cities);
           } catch (error) {
             Alert.alert('Não foi possivel remover! 😢');
           }
